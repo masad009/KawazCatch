@@ -12,12 +12,15 @@ USING_NS_CC;
 
 // コンストラクタ
 MainScene::MainScene()
+:_player(NULL)
 {
 }
 
 // デストラクタ
 MainScene::~MainScene()
 {
+    // _playerをreleaseしてメモリリークを防ぎます
+    CC_SAFE_RELEASE_NULL(_player);
 }
 
 // layerをsceneに貼り付けて返すクラスメソッド
@@ -47,8 +50,33 @@ bool MainScene::init()
     background->setPosition(Vec2(size.width /2.0 , size.height / 2.0));
     // 親ノードにスプライトを追加する
     this->addChild(background);
+   
+    // Spriteを生成して_playerに格納
+    this->setPlayer(Sprite::create("player.png"));
+    // _playerの位置を設定
+    _player->setPosition(Vec2(size.width /2.0, size.height - 445));
+    // シーンに_playerを配置
+    this->addChild(_player);
+    
+    auto listener = EventListenerTouchOneByOne::create();
+    listener->onTouchBegan = [](Touch* touch, Event* event){
+        // タッチされたときの処理
+        log("Touch at (%f, %f)", touch->getLocation().x, touch->getLocation().y);
+        return true;
+    };
+    
+    listener->onTouchMoved = [this](Touch* touch, Event* event){
+        // タッチ中に動いたときの処理
+        // 前回のタッチ位置との差をベクトルで取得する
+        Vec2 delta = touch->getDelta();
+        
+        // 現在のかわずたんの座標を取得する
+        Vec2 position = _player->getPosition();
+        
+        // 現在座標 + 移動量を新たな座標にする
+        Vec2 newPosition = position + delta;
+        _player->setPosition(newPosition);
+    };
+    director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,this);
     return true;
 }
-
-
-
