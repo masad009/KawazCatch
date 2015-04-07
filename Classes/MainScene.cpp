@@ -75,6 +75,10 @@ bool MainScene::init()
         
         // 現在座標 + 移動量を新たな座標にする
         Vec2 newPosition = position + delta;
+
+        // 画面サイズを取り出す
+        auto winSize = Director::getInstance()->getWinSize();
+        newPosition = newPosition.getClampPoint(Vec2(0,position.y), Vec2(winSize.width,position.y));
         _player->setPosition(newPosition);
     };
     director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,this);
