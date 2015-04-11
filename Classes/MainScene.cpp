@@ -10,6 +10,11 @@
 
 USING_NS_CC;
 
+/// フルーツの画面上端からのマージン(px)
+const int FRUIT_TOP_MARGIN = 40;
+/// フルーツの出現率
+const int FRUIT_SPAWN_RATE = 20;
+
 // コンストラクタ
 MainScene::MainScene()
 :_player(NULL)
@@ -66,7 +71,7 @@ bool MainScene::init()
     };
     
     listener->onTouchMoved = [this](Touch* touch, Event* event){
-        // タッチ中に動いたときの処理,　,
+        // タッチ中に動いたときの処理
         // 前回のタッチ位置との差をベクトルで取得する
         Vec2 delta = touch->getDelta();
         
@@ -82,5 +87,76 @@ bool MainScene::init()
         _player->setPosition(newPosition);
     };
     director->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener,this);
+    
+    // updateを毎フレーム実行するように登録する
+    this->scheduleUpdate();
+    
     return true;
 }
+
+
+Sprite* MainScene::addFruit()
+{
+    // 画面サイズを取り出す
+    auto winSize = Director::getInstance()->getWinSize();
+    // フルーツの種類を選択する
+    int fruitType = rand() % static_cast<int>(FruitType::COUNT);
+    // フルーツを作成する
+    std::string filename = StringUtils::format("fruit%d.png", fruitType);
+    auto fruit = Sprite:: create(filename);
+    fruit->setTag(fruitType); // フルーツの種類をタグとして指定する
+    
+    auto fruitSize = fruit->getContentSize();// フルーツのサイズを取り出す
+    float fruitXPos = rand() % static_cast<int>(winSize.width); //X軸のランダムな位置を選択する
+    
+    fruit->setPosition(Vec2(fruitXPos,winSize.height - FRUIT_TOP_MARGIN - fruitSize.height / 2.0));
+    
+    this->addChild(fruit);
+    _fruits.pushBack(fruit); // _fruitsベクターにフルーツを追加する
+    
+    // フルーツに動きをつける
+    // 地面の座標
+    auto ground = Vec2(fruitXPos, 0);
+    // ３秒かけてgroundの位置まで落下させるアクション
+    auto fall = MoveTo::create(3, ground);
+
+    
+    // removeFruitを即座に呼び出すアクション
+    auto remove = CallFuncN::create([this](Node * node){
+        // NodeをSpriteにダウンキャストする
+        auto sprite = dynamic_cast<Sprite *>(node);
+        
+        // removeFruitを呼び出す
+        this->removeFruit(sprite);
+    });
+    
+    // fallとremoveを連続して実行させるアクション
+    auto sequence = Sequence::create(fall, remove, NULL);
+    fruit->runAction(sequence);
+    return fruit;
+};
+
+bool MainScene::removeFruit(cocos2d::Sprite *fruit)
+{
+    // _fruitsにfruitが含まれているかを確認する
+    if(_fruits.contains(fruit)){
+        // 親ノードから削除する
+        fruit->removeFromParent();
+        // _fruit配列から削除する
+        _fruits.eraseObject(fruit);
+        return true;
+    }
+    return false;
+}
+
+void MainScene::update(float dt)
+{
+  
+    // 毎フレーム実行される
+    int random = rand() % FRUIT_SPAWN_RATE;
+    if(random == 0){// 適当な乱数が0のとき
+        this->addFruit();
+    }
+};
+
+
