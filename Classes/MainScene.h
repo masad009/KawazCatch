@@ -53,8 +53,13 @@ private:
      * @return ただしk削除されたか
      */
     bool removeFruit(cocos2d::Sprite * fruit);
-};
 
+    /** フルーツを取得します
+     * @param Sprite* 取得するフルーツ
+     */
+    void catchFruit(cocos2d::Sprite* fruit);
+
+};
 
 
 
