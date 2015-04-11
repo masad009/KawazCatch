@@ -66,7 +66,7 @@ bool MainScene::init()
     };
     
     listener->onTouchMoved = [this](Touch* touch, Event* event){
-        // タッチ中に動いたときの処理,　
+        // タッチ中に動いたときの処理,　,
         // 前回のタッチ位置との差をベクトルで取得する
         Vec2 delta = touch->getDelta();
         
