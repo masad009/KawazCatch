@@ -17,7 +17,9 @@ const int FRUIT_SPAWN_RATE = 20;
 
 // コンストラクタ
 MainScene::MainScene()
-:_player(NULL)
+:_score(0)
+,_player(NULL)
+,_scoreLabel(NULL)
 {
 }
 
@@ -26,6 +28,7 @@ MainScene::~MainScene()
 {
     // _playerをreleaseしてメモリリークを防ぎます
     CC_SAFE_RELEASE_NULL(_player);
+    CC_SAFE_RELEASE_NULL(_scoreLabel);
 }
 
 // layerをsceneに貼り付けて返すクラスメソッド
@@ -91,6 +94,22 @@ bool MainScene::init()
     // updateを毎フレーム実行するように登録する
     this->scheduleUpdate();
     
+    // スコアラベルの追加
+    auto scoreLabel = Label::createWithSystemFont(StringUtils::toString(_score),"Marker Felt", 16);
+    
+    scoreLabel->enableShadow(Color4B::BLACK, Size(0.5,0.5),3);
+    scoreLabel->enableOutline(Color4B::BLACK,1.5);
+    
+    scoreLabel->setPosition(Vec2(size.width/ 2.0 * 1.5, size.height - 40 ));
+    this->setScoreLabel(scoreLabel);
+    this->addChild(_scoreLabel);
+    
+    // スコアヘッダーの追加
+    auto scoreLabelHeader = Label::createWithSystemFont("SCORE", "Marker Felt", 16);
+    scoreLabelHeader->enableShadow(Color4B::BLACK,Size(0.5,0.5), 3);
+    scoreLabelHeader->enableOutline(Color4B::BLACK, 1.5);
+    scoreLabelHeader->setPosition(Vec2(size.width/2.0 * 1.5,size.height - 20));
+    this->addChild(scoreLabelHeader);
     return true;
 }
 
@@ -171,4 +190,9 @@ void MainScene::catchFruit(cocos2d::Sprite *fruit)
 {
     // フルーツを削除する
     this->removeFruit(fruit);
+    // スコアを一点追加する
+    _score +=1;
+    // スコア用のラベルの表示を更新している
+    _scoreLabel->setString(StringUtils::toString(_score));
+
 }
