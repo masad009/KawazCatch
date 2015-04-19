@@ -112,7 +112,7 @@ bool MainScene::init()
     
     // タイマーラベルの追加
     int second = static_cast<int>(_second); // int型にキャストする
-    auto secondLabel = Label::createWithSystemFont(StringUtils::toString(second), "Maker Felt", 16);
+    auto secondLabel = Label::createWithSystemFont(StringUtils::toString(second), "Marker Felt", 16);
     this->setSecondLabel(secondLabel);
     secondLabel->enableShadow(Color4B::BLACK,Size(0.5,0.5),3);
     secondLabel->enableOutline(Color4B::BLACK, 1.5);
@@ -219,6 +219,7 @@ void MainScene::update(float dt)
         if(_second < 0){ // 制限時間が0になったら
             // リザルト状態へ移行
             _state = GameState::RESULT;
+            this->onResult();
         }
     }
 };
@@ -232,4 +233,32 @@ void MainScene::catchFruit(cocos2d::Sprite *fruit)
     // スコア用のラベルの表示を更新している
     _scoreLabel->setString(StringUtils::toString(_score));
 
+}
+
+void MainScene::onResult()
+{
+    _state = GameState::RESULT;
+    auto winSize = Director::getInstance()->getWinSize();
+    
+    // 「もう一度遊ぶ」ボタン
+    auto replayButton = MenuItemImage::create("replay_button.png","replay_button_pressed.png",[](Ref* ref){
+        // 「もう一度遊ぶ」ボタンを押した時の処理
+        // 新しくMainSceneを作成して置き換えてやる
+        auto scene = MainScene::createScene();
+        Director::getInstance()->replaceScene(scene);
+    });
+    
+    // 「タイトルへ戻る」ボタン
+    auto titleButton = MenuItemImage::create("title_button.png", "title_button_pressed.png", [](Ref* ref){
+       // 「タイトルへ戻る」ボタンを押した時の処理
+       // 今は何も実装していない
+    });
+    
+    // 2つのボタンからメニューを作成する
+    auto menu = Menu::create(replayButton, titleButton, NULL);
+    // ボタンを縦に並べる
+    menu->alignItemsVerticallyWithPadding(15);// ボタンを縦に並べる
+    menu->setPosition(Vec2(winSize.width / 2.0 , winSize.height / 2.0));
+    this->addChild(menu);
+    
 }

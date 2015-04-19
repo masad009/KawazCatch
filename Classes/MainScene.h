@@ -71,7 +71,13 @@ private:
      * @param Sprite* 取得するフルーツ
      */
     void catchFruit(cocos2d::Sprite* fruit);
-
+    
+    /** ゲームが終了したときに呼び出されます
+     *
+     */
+    void onResult();
+    
+    
 };
 
 
