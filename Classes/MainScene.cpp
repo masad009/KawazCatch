@@ -7,6 +7,8 @@
 //
 
 #include "MainScene.h"
+#include "SimpleAudioEngine.h"
+#include "MainScene.h"
 
 USING_NS_CC;
 
@@ -262,3 +264,14 @@ void MainScene::onResult()
     this->addChild(menu);
     
 }
+
+void MainScene::onEnterTransitionDidFinish()
+{
+    Layer::onEnterTransitionDidFinish();
+    // BGMを作成する
+    CocosDenshion::SimpleAudioEngine::getInstance()->playBackgroundMusic("main.mp3", true);
+    
+}
+
+
+

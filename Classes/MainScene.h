@@ -28,6 +28,7 @@ public:
     };
     static cocos2d::Scene*createScene();
     void update(float dt);
+    void onEnterTransitionDidFinish() override;
     CREATE_FUNC(MainScene);
     // _player変数と、getPlayer()メソッド、setPlayer(Sprite *)メソッドが自動的に実装される
     CC_SYNTHESIZE(cocos2d::Vector<cocos2d::Sprite *>, _fruits, Fruits);

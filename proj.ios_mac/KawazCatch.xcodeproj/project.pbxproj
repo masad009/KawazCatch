@@ -67,6 +67,7 @@
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
 		D659CD031AD17C4100D765C8 /* images in Resources */ = {isa = PBXBuildFile; fileRef = D659CD021AD17C4100D765C8 /* images */; };
 		D65AD3A21AD1049E00C1B806 /* MainScene.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D65AD3A01AD1049E00C1B806 /* MainScene.cpp */; };
+		D689003A1AE3FBFE00A13FE4 /* bgm in Resources */ = {isa = PBXBuildFile; fileRef = D68900391AE3FBFE00A13FE4 /* bgm */; };
 		D6B0611B1803AB670077942B /* CoreMotion.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D6B0611A1803AB670077942B /* CoreMotion.framework */; };
 /* End PBXBuildFile section */
 
@@ -161,6 +162,7 @@
 		D659CD021AD17C4100D765C8 /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		D65AD3A01AD1049E00C1B806 /* MainScene.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = MainScene.cpp; sourceTree = "<group>"; };
 		D65AD3A11AD1049E00C1B806 /* MainScene.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainScene.h; sourceTree = "<group>"; };
+		D68900391AE3FBFE00A13FE4 /* bgm */ = {isa = PBXFileReference; lastKnownFileType = folder; path = bgm; sourceTree = "<group>"; };
 		D6B0611A1803AB670077942B /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.0.sdk/System/Library/Frameworks/CoreMotion.framework; sourceTree = DEVELOPER_DIR; };
 /* End PBXFileReference section */
 
@@ -277,6 +279,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				D68900391AE3FBFE00A13FE4 /* bgm */,
 				D659CD021AD17C4100D765C8 /* images */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
@@ -473,6 +476,7 @@
 				521A8E6419F0C34300D177D7 /* Default-667h@2x.png in Resources */,
 				46880B7B19C43A67006E1F66 /* CloseNormal.png in Resources */,
 				50EF629717ECD46A001EB2F8 /* Icon-58.png in Resources */,
+				D689003A1AE3FBFE00A13FE4 /* bgm in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
