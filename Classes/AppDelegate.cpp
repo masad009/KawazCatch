@@ -43,7 +43,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
     glview->setDesignResolutionSize(320, 480, ResolutionPolicy::SHOW_ALL);
 
     FileUtils::getInstance()->addSearchPath("images");
-    FileUtils::getInstance()->addSearchPath("bgm");    
+    FileUtils::getInstance()->addSearchPath("bgm");
     
     // create a scene. it's an autorelease object
 //    auto scene = HelloWorld::createScene();
