@@ -19,15 +19,25 @@ protected:
     bool init() override;
     
 public:
+    enum class GameState
+    {
+        /// ゲーム中
+        PLAYING,
+        /// スコア表示
+        RESULT
+    };
     static cocos2d::Scene*createScene();
     void update(float dt);
     CREATE_FUNC(MainScene);
     // _player変数と、getPlayer()メソッド、setPlayer(Sprite *)メソッドが自動的に実装される
     CC_SYNTHESIZE(cocos2d::Vector<cocos2d::Sprite *>, _fruits, Fruits);
     CC_SYNTHESIZE(int,_score, Score);
+    CC_SYNTHESIZE(float, _second, Second);
+    CC_SYNTHESIZE(GameState, _state, State);
     CC_SYNTHESIZE_RETAIN(cocos2d::Sprite *, _player, Player);
     CC_SYNTHESIZE_RETAIN(cocos2d::Label *, _scoreLabel,ScoreLabel);
-    
+    CC_SYNTHESIZE_RETAIN(cocos2d::Label *, _secondLabel, SecondLabel);
+                         
     
 private:
     enum class FruitType

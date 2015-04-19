@@ -12,14 +12,19 @@ USING_NS_CC;
 
 /// フルーツの画面上端からのマージン(px)
 const int FRUIT_TOP_MARGIN = 40;
+/// 制限時間
+const float TIME_LIMIT_SECOND = 60;
 /// フルーツの出現率
 const int FRUIT_SPAWN_RATE = 20;
 
 // コンストラクタ
 MainScene::MainScene()
 :_score(0)
+,_second(TIME_LIMIT_SECOND)
+,_state(GameState::PLAYING)
 ,_player(NULL)
 ,_scoreLabel(NULL)
+,_secondLabel(NULL)
 {
 }
 
@@ -29,6 +34,7 @@ MainScene::~MainScene()
     // _playerをreleaseしてメモリリークを防ぎます
     CC_SAFE_RELEASE_NULL(_player);
     CC_SAFE_RELEASE_NULL(_scoreLabel);
+    CC_SAFE_RELEASE_NULL(_secondLabel);
 }
 
 // layerをsceneに貼り付けて返すクラスメソッド
@@ -104,6 +110,23 @@ bool MainScene::init()
     this->setScoreLabel(scoreLabel);
     this->addChild(_scoreLabel);
     
+    // タイマーラベルの追加
+    int second = static_cast<int>(_second); // int型にキャストする
+    auto secondLabel = Label::createWithSystemFont(StringUtils::toString(second), "Maker Felt", 16);
+    this->setSecondLabel(secondLabel);
+    secondLabel->enableShadow(Color4B::BLACK,Size(0.5,0.5),3);
+    secondLabel->enableOutline(Color4B::BLACK, 1.5);
+    secondLabel->setPosition(Vec2(size.width /2.0, size.height -40));
+    this->addChild(secondLabel);
+    
+    // タイマーヘッダーの追加
+    auto secondLabelHeader = Label::createWithSystemFont("TIME","Marker Felt" ,16);
+    secondLabelHeader->enableShadow(Color4B::BLACK,Size(0.5,0.5),3);
+    secondLabelHeader->enableOutline(Color4B::BLACK,1.5);
+    secondLabelHeader->setPosition(Vec2(size.width/2.0, size.height -20));
+    this->addChild(secondLabelHeader);
+    
+    
     // スコアヘッダーの追加
     auto scoreLabelHeader = Label::createWithSystemFont("SCORE", "Marker Felt", 16);
     scoreLabelHeader->enableShadow(Color4B::BLACK,Size(0.5,0.5), 3);
@@ -170,18 +193,32 @@ bool MainScene::removeFruit(cocos2d::Sprite *fruit)
 
 void MainScene::update(float dt)
 {
-    // 毎フレーム実行される
-    int random = rand() % FRUIT_SPAWN_RATE;
-    if(random == 0){// 適当な乱数が0のとき
-        this->addFruit();
-    }
+    if(_state == GameState::PLAYING)// プレイ中のとき
+    {
+        // 毎フレーム実行される
+        int random = rand() % FRUIT_SPAWN_RATE;
+        if(random == 0){// 適当な乱数が0のとき
+            this->addFruit();
+        }
     
-    for(auto& fruit : _fruits){
-        Vec2 busketPosition = _player->getPosition() - Vec2(0,10);
-        Rect boundingBox = fruit->getBoundingBox(); // フルーツの短形を取り出す
-        bool isHit = boundingBox.containsPoint(busketPosition);
-        if(isHit){
-            this->catchFruit(fruit);
+        for(auto& fruit : _fruits){
+            Vec2 busketPosition = _player->getPosition() - Vec2(0,10);
+            Rect boundingBox = fruit->getBoundingBox(); // フルーツの短形を取り出す
+            bool isHit = boundingBox.containsPoint(busketPosition);
+            if(isHit){
+                this->catchFruit(fruit);
+            }
+        }
+    
+        // 残り秒数を減らす
+        _second-= dt;
+        // 残り秒数の表示を更新する
+        int second = static_cast<int>(_second);// int型にキャストする
+        _secondLabel->setString(StringUtils::toString(second));
+    
+        if(_second < 0){ // 制限時間が0になったら
+            // リザルト状態へ移行
+            _state = GameState::RESULT;
         }
     }
 };
